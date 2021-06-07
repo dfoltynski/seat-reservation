@@ -15,5 +15,9 @@
   "homepage": "https://bitbucket.org/xkom/zadanie_rekrutacyjne#readme",
   "devDependencies": {
     "json-server": "^0.16.3"
+  },
+  "dependencies": {
+    "axios": "^0.21.1",
+    "react-router-dom": "^5.2.0"
   }
 }
