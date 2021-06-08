@@ -13,29 +13,33 @@ export default function SeatsForm() {
     // pass it to redux store
   };
   return (
-    <form className="form" onSubmit={handleSubmit}>
-      <div className="form__container--input">
-        <label htmlFor="seats-number">Liczba miejsc: </label>
-        <input
-          id="seats-number"
-          type="number"
-          min="1"
-          className="input"
-          required
-        />
-      </div>
-      <div className="form__container--input">
-        <input id="adjacent-seats" type="checkbox" />
-        <label htmlFor="adjacent-seats">Czy miejsca mają być sąsiednie?</label>
-      </div>
-      <div className="form__container--input">
-        <input
-          id="submit"
-          type="submit"
-          value="Wybierz miejsca"
-          className="input--submit"
-        />
-      </div>
-    </form>
+    <div className="seats__form">
+      <form className="form" onSubmit={handleSubmit}>
+        <div className="form__container--input">
+          <label htmlFor="seats-number">Liczba miejsc: </label>
+          <input
+            id="seats-number"
+            type="number"
+            min="1"
+            className="input"
+            required
+          />
+        </div>
+        <div className="form__container--input">
+          <input id="adjacent-seats" type="checkbox" />
+          <label htmlFor="adjacent-seats">
+            Czy miejsca mają być sąsiednie?
+          </label>
+        </div>
+        <div className="form__container--input">
+          <input
+            id="submit"
+            type="submit"
+            value="Wybierz miejsca"
+            className="input--submit"
+          />
+        </div>
+      </form>
+    </div>
   );
 }

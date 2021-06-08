@@ -16,11 +16,26 @@ export default function ChooseSeats() {
 
   const generateSeats = (seatsApiResponse) => {
     const takenSeats = [];
+    const seatsGrid = document.createElement("div");
+    seatsGrid.classList.add("seats__grid--left");
     randomizeTakenSeats().forEach((id) => {
       takenSeats.push(Object.entries(seatsApiResponse)[id]);
     });
 
     console.log(takenSeats);
+    let styleContent = "";
+    for (let i = 1; i <= 77; i++) {
+      styleContent += `.seat--${i} { grid-area: seat--${i};}`;
+
+      let seat = document.createElement("div");
+      seat.classList.add(`seat`);
+      seat.classList.add(`seat--${i}`);
+      seatsGrid.appendChild(seat);
+    }
+    const style = document.createElement("style");
+    style.innerHTML = styleContent;
+    document.querySelector(".seats").appendChild(seatsGrid);
+    document.head.appendChild(style);
   };
 
   useEffect(() => {
@@ -31,5 +46,139 @@ export default function ChooseSeats() {
     })();
   }, []);
 
-  return <div></div>;
+  return (
+    <main className="seats">
+      {/* <div className="seats__grid">
+        <table>
+          <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+          </tr>
+          <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+          </tr>
+          <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+          </tr>
+          <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+          </tr>
+          <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+          </tr>
+          <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+          </tr>
+          <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+          </tr>
+        </table>
+        <table>
+          <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+          </tr>
+          <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+          </tr>
+          <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+          </tr>
+        </table>
+        <table>
+          <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+          </tr>
+          <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+          </tr>
+          <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+          </tr>
+        </table>
+        <table>
+          <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+          </tr>
+          <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+          </tr>
+          <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+          </tr>
+        </table>
+        <table>
+          <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+          </tr>
+          <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+          </tr>
+          <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+          </tr>
+        </table>
+      </div> */}
+
+      <footer>
+        <input value="Rezerwuj" className="input--submit" type="submit" />
+      </footer>
+    </main>
+  );
 }
