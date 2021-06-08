@@ -35,38 +35,78 @@
 }
 
 .seats__grid--left {
+  display: grid;
   max-width: 453px;
   margin: 1em;
-  display: grid;
-  min-width: 0; min-height: 0;
+
   grid-template-columns: repeat(9,1fr); 
   grid-template-rows: repeat(14,1fr);            ; 
-  grid-gap: 0.2em; 
+  grid-gap: 0.24em; 
   grid-template-areas: 
-    "seat--0-14 seat--1-14 seat--2-14 seat--3-14 seat--4-14 seat--5-14 seat--6-14 seat--7-14 seat--8-14 seat--9-14"
-    "seat--0-13 seat--1-13 seat--2-13 seat--3-13 seat--4-13 seat--5-13 seat--6-13 seat--7-13 seat--8-13 seat--9-13"
-    "seat--0-12 seat--1-12 seat--2-12 seat--3-12 seat--4-12 seat--5-12 seat--6-12 seat--7-12 seat--8-12 seat--9-12"
-    "seat--0-11 seat--1-11 seat--2-11 seat--3-11 seat--4-11 seat--5-11 seat--6-11 seat--7-11 seat--8-11 seat--9-11"
-    "seat--0-10 seat--1-10 seat--2-10 seat--3-10 seat--4-10 seat--5-10 seat--6-10 seat--7-10 seat--8-10 seat--9-10"
-    "seat--0-9  seat--1-9  seat--2-9  seat--3-9  seat--4-9  seat--5-9  seat--6-9  seat--7-9  seat--8-9  seat--9-9"
-    "seat--0-8  seat--1-8  seat--2-8  seat--3-8  seat--4-8  seat--5-8  seat--6-8  seat--7-8  seat--8-8  seat--9-8"
-    "seat--0-7  seat--1-7  seat--2-7  seat--3-7  seat--4-7  seat--5-7  seat--6-7  seat--7-7  seat--8-7  seat--9-7"
-    "seat--0-6  seat--1-6  seat--2-6  seat--3-6  seat--4-6  seat--5-6  seat--6-6  seat--7-6  seat--8-6  seat--9-6"
-    "seat--0-5  seat--1-5  seat--2-5  seat--3-5  seat--4-5  seat--5-5  seat--6-5  seat--7-5  seat--8-5  seat--9-5"
-    "seat--0-4  seat--1-4  seat--2-4  seat--3-4  seat--4-4  seat--5-4  seat--6-4  seat--7-4  seat--8-4  seat--9-4"
-    "seat--0-3  seat--1-3  seat--2-3  seat--3-3  seat--4-3  seat--5-3  seat--6-3  seat--7-3  seat--8-3  seat--9-3"
-    "seat--0-2  seat--1-2  seat--2-2  seat--3-2  seat--4-2  seat--5-2  seat--6-2  seat--7-2  seat--8-2  seat--9-2"
-    "seat--0-1  seat--1-1  seat--2-1  seat--3-1  seat--4-1  seat--5-1  seat--6-1  seat--7-1  seat--8-1  seat--9-1"
-    "seat--0-0  seat--1-0  seat--2-0  seat--3-0  seat--4-0  seat--5-0  seat--6-0  seat--7-0  seat--8-0  seat--9-0"; 
+    "s014 s114 s214 s314 s414 s514 s614 s714 s814 s914"
+    "s013 s113 s213 s313 s413 s513 s613 s713 s813 s913"
+    "s012 s112 s212 s312 s412 s512 s612 s712 s812 s912"
+    "s011 s111 s211 s311 s411 s511 s611 s711 s811 s911"
+    "s010 s110 s210 s310 s410 s510 s610 s710 s810 s910"
+    "s09  s19  s29  s39  s49  s59  s69  s79  s89  s99"
+    "s08  s18  s28  s38  s48  s58  s68  s78  s88  s98"
+    "s07  s17  s27  s37  s47  s57  s67  s77  s87  s97"
+    "s06  s16  s26  s36  s46  s56  s66  s76  s86  s96"
+    "s05  s15  s25  s35  s45  s55  s65  s75  s85  s95"
+    "s04  s14  s24  s34  s44  s54  s64  s74  s84  s94"
+    "s03  s13  s23  s33  s43  s53  s63  s73  s83  s93"
+    "s02  s12  s22  s32  s42  s52  s62  s72  s82  s92"
+    "s01  s11  s21  s31  s41  s51  s61  s71  s81  s91"
+    "s00  s10  s20  s30  s40  s50  s60  s70  s80  s90"; 
+}
+ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
 }
 
-footer {
-  position: absolute;
-  bottom: 0;
+li {
+  float: left;
+  margin: 2em;
+  text-align: center;
+  display: flex;
+  align-items: center;
+}
+
+.form--reserve {
+  display: flex;
+  width: 100vw;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.legend {
+  float: left;
+  margin: 1em;
+}
+
+.input--reserve {
+  font-size: 16px;
+  width: 12em;
+  height: 4em;
+  margin: 1em;
+}
+
+
+.seats__grid__container {
+  width: 100%;
+  display: flex;
+  justify-content: center;
 }
 
 .seats {
   height: 100vh;
+}
+
+.seat--choosen 
+{
+background-color: deeppink;
 }
 
 .seat--taken {
@@ -74,8 +114,9 @@ footer {
 }
 
 .seat {
-  width: 3em;
-  height: 3em;
+  width: 2.4em;
+  height: 2.4em;
   border: 1px solid black;
   cursor: pointer;
 }
+

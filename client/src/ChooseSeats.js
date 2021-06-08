@@ -1,16 +1,12 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
+import { useSelector } from "react-redux";
+
 import axios from "axios";
 
 const URL = "http://localhost:3000/seats";
 
 export default function ChooseSeats() {
-  const [seats, setSeats] = useState();
-
-  // function getNodeIndex(elm) {
-  //   var c = elm.parentNode.children,
-  //     i = 0;
-  //   for (; i < c.length; i++) if (c[i] == elm) return i;
-  // }
+  const { seats } = useSelector((state) => state.seatsConfiguration);
 
   const handleSeatClick = (e) => {
     console.log(e.target);
@@ -23,7 +19,7 @@ export default function ChooseSeats() {
 
     Object.entries(seatsApiResponse).forEach((seat) => {
       seatsCords.push(
-        `${seat[1].cords.x}:${seat[1].cords.y}:${seat[1].reserved}`
+        `${seat[1].id}:${seat[1].cords.x}:${seat[1].cords.y}:${seat[1].reserved}`
       );
     });
 
@@ -33,15 +29,12 @@ export default function ChooseSeats() {
     let seatClassName = "";
     seatsCords.forEach((seatCords) => {
       let seat = document.createElement("div");
-      seatClassName = `seat--${seatCords.split(":")[0]}-${
-        seatCords.split(":")[1]
-      }`;
+      seatClassName = `${seatCords.split(":")[0]}`;
       styleContent += `.${seatClassName} { grid-area: ${seatClassName};}`;
 
       seat.classList.add(`seat`);
       seat.classList.add(`${seatClassName}`);
-      console.log(seatCords.split(":")[2]);
-      if (seatCords.split(":")[2] == "true") {
+      if (seatCords.split(":")[3] == "true") {
         seat.classList.add(`seat--taken`);
       }
       seat.onclick = handleSeatClick;
@@ -50,23 +43,47 @@ export default function ChooseSeats() {
 
     const style = document.createElement("style");
     style.innerHTML = styleContent;
-    document.querySelector(".seats").appendChild(seatsGrid);
+    document.querySelector(".seats__grid__container").appendChild(seatsGrid);
     document.head.appendChild(style);
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
   };
 
   useEffect(() => {
     (async () => {
       const res = (await axios.get(URL)).data;
-      setSeats(res);
       generateSeats(res);
     })();
+
+    console.log(seats);
   }, []);
 
   return (
     <main className="seats">
-      <footer>
-        <input value="Rezerwuj" className="input--submit" type="submit" />
-      </footer>
+      <div className="seats__grid__container"></div>
+      <form className="form--reserve" onSubmit={handleSubmit}>
+        <ul>
+          <li>
+            <div className="seat legend"></div>
+            Miejsca dostępne
+          </li>
+          <li>
+            <div className="seat seat--taken legend"></div>
+            Miejsca zarezerwowane
+          </li>
+          <li>
+            <div className="seat seat--choosen legend"></div>
+            Twój wybór
+          </li>
+        </ul>
+        <input
+          value="Rezerwuj"
+          className="input--submit input--reserve"
+          type="submit"
+        />
+      </form>
     </main>
   );
 }

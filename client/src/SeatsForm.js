@@ -1,8 +1,12 @@
-import React from "react";
+import React, { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { addSeatsConfiguration } from "./features/seatsConfiguration";
 import { Redirect } from "react-router";
 import "./App.css";
 
 export default function SeatsForm() {
+  const [redirect, setRedirect] = useState(false);
+  const dispatch = useDispatch();
   const handleSubmit = (e) => {
     e.preventDefault();
 
@@ -11,8 +15,12 @@ export default function SeatsForm() {
     console.log(numberOfSeats, adjacentSeats);
 
     // pass it to redux store
+    dispatch(addSeatsConfiguration({ numberOfSeats, adjacentSeats }));
+    setRedirect(true);
   };
-  return (
+  return redirect ? (
+    <Redirect to="wybierz-miejsca" />
+  ) : (
     <div className="seats__form">
       <form className="form" onSubmit={handleSubmit}>
         <div className="form__container--input">
