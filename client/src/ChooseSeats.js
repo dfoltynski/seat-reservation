@@ -1,7 +1,11 @@
 import React, { useEffect, useState, useRef } from "react";
-import { useSelector } from "react-redux";
-
 import axios from "axios";
+import { useDispatch } from "react-redux";
+import seatsConfiguration, {
+  addSeatsConfiguration,
+} from "./features/seatsConfiguration";
+
+import SeatsSummary from "./SeatsSummary";
 
 const URL = "http://localhost:3000/seats";
 const CHOSEN_STYLE = "seat--chosen";
@@ -9,8 +13,10 @@ const TAKEN_STYLE = "seat--taken";
 
 export default function ChooseSeats({ numberOfSeats, adjacentSeats }) {
   const [seats, setSeats] = useState({ numberOfSeats, adjacentSeats });
+  const [redirect, setRedirect] = useState(false);
 
   const grid = useRef();
+  const dispatch = useDispatch();
 
   const returnNextSeat = (currentSeat) => {
     return `.s${
@@ -26,8 +32,6 @@ export default function ChooseSeats({ numberOfSeats, adjacentSeats }) {
       .querySelectorAll(`.seat:not(.${TAKEN_STYLE}`)
       .forEach((seat) => {
         for (let i = 0; i < seats.numberOfSeats; i++) {
-          console.log(seat);
-
           // done
           if (
             grid.current.querySelectorAll(`.${CHOSEN_STYLE}`).length ==
@@ -76,12 +80,6 @@ export default function ChooseSeats({ numberOfSeats, adjacentSeats }) {
             .forEach((seat) => seat.classList.remove(`${CHOSEN_STYLE}`));
         }
       } else {
-        grid.current
-          .querySelectorAll(`.seat:not(.${TAKEN_STYLE})`)
-          .forEach((seat) => {
-            console.log(seat);
-          });
-
         clickedSeat.classList.add(`${CHOSEN_STYLE}`);
         for (let i = 1; i < seats.numberOfSeats; i++) {
           let nextSeat = returnNextSeat(clickedSeat);
@@ -105,12 +103,8 @@ export default function ChooseSeats({ numberOfSeats, adjacentSeats }) {
             clickedSeat.classList.contains(`${CHOSEN_STYLE}`)
           ) {
             grid.current
-              .querySelectorAll(`.seat:not(.${TAKEN_STYLE})`)
-              .forEach((seat) => {
-                grid.current
-                  .querySelectorAll(`.${CHOSEN_STYLE}`)
-                  .forEach((seat) => seat.classList.remove(`${CHOSEN_STYLE}`));
-              });
+              .querySelectorAll(`.${CHOSEN_STYLE}`)
+              .forEach((seat) => seat.classList.remove(`${CHOSEN_STYLE}`));
             break;
           } else {
             clickedSeat.classList.add(`${CHOSEN_STYLE}`);
@@ -155,6 +149,13 @@ export default function ChooseSeats({ numberOfSeats, adjacentSeats }) {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    let seatsList = [];
+    console.log("asd");
+    grid.current.querySelectorAll(`.${CHOSEN_STYLE}`).forEach((seat) => {
+      seatsList.push(seat.classList[1]);
+    });
+    dispatch(addSeatsConfiguration(seatsList));
+    setRedirect(true);
   };
 
   useEffect(() => {
@@ -164,7 +165,9 @@ export default function ChooseSeats({ numberOfSeats, adjacentSeats }) {
     })();
   }, []);
 
-  return (
+  return redirect ? (
+    <SeatsSummary />
+  ) : (
     <main className="seats">
       <div className="seats__grid__container">
         <div className="grid" ref={grid}></div>

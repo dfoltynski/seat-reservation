@@ -3,7 +3,7 @@ import { createSlice } from "@reduxjs/toolkit";
 export const seatsConfigurationSlice = createSlice({
   name: "seatsConfiguration",
   initialState: {
-    seats: {},
+    seats: [],
   },
   reducers: {
     addSeatsConfiguration: (state, action) => {

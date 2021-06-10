@@ -1,7 +1,4 @@
 import React, { useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { addSeatsConfiguration } from "./features/seatsConfiguration";
-import { Redirect } from "react-router";
 import "./App.css";
 import ChooseSeats from "./ChooseSeats";
 
@@ -11,15 +8,12 @@ export default function SeatsForm() {
   const [numberOfSeats, setNumberOfSeats] = useState(0);
   const [adjacentSeats, setAdjacentSeats] = useState(false);
 
-  const dispatch = useDispatch();
   const handleSubmit = (e) => {
     e.preventDefault();
 
     setNumberOfSeats(Number(e.target[0].value));
     setAdjacentSeats(Boolean(e.target[1].checked));
-    console.log(numberOfSeats, adjacentSeats);
 
-    dispatch(addSeatsConfiguration({ numberOfSeats, adjacentSeats }));
     setRedirect(true);
   };
   return redirect ? (
