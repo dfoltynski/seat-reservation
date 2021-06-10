@@ -25,6 +25,7 @@ export default function ChooseSeats({ numberOfSeats, adjacentSeats }) {
       if (!seats.adjacentSeats) {
         clickedSeat.classList.toggle("seat--choosen");
 
+        // clean up when you clicked more times than number of seats
         if (
           grid.current.querySelectorAll(".seat--choosen").length >
           seats.numberOfSeats
@@ -43,6 +44,9 @@ export default function ChooseSeats({ numberOfSeats, adjacentSeats }) {
         clickedSeat.classList.add("seat--choosen");
         for (let i = 1; i < seats.numberOfSeats; i++) {
           let nextSeat = returnNextSeat(clickedSeat);
+          clickedSeat = grid.current.querySelector(nextSeat);
+
+          // clean up when you clicked more times than number of seats
           if (
             grid.current.querySelectorAll(".seat--choosen").length >
             seats.numberOfSeats
@@ -52,24 +56,22 @@ export default function ChooseSeats({ numberOfSeats, adjacentSeats }) {
               .forEach((seat) => seat.classList.remove("seat--choosen"));
             break;
           }
+
+          // do nothing when there is no place for x number of seats or you want to use taken seat
           if (
-            grid.current.querySelector(nextSeat) == null ||
-            grid.current
-              .querySelector(nextSeat)
-              .classList.contains("seat--taken")
+            clickedSeat == null ||
+            clickedSeat.classList.contains("seat--taken")
           ) {
             grid.current
               .querySelectorAll(".seat:not(.seat--taken)")
               .forEach((seat) => {
-                console.log(seat);
                 grid.current
                   .querySelectorAll(".seat--choosen")
                   .forEach((seat) => seat.classList.remove("seat--choosen"));
               });
+            break;
           } else {
-            grid.current.querySelector(nextSeat).classList.add("seat--choosen");
-
-            clickedSeat = grid.current.querySelector(nextSeat);
+            clickedSeat.classList.add("seat--choosen");
           }
         }
       }
