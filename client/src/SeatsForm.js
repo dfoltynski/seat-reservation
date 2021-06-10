@@ -3,23 +3,28 @@ import { useDispatch, useSelector } from "react-redux";
 import { addSeatsConfiguration } from "./features/seatsConfiguration";
 import { Redirect } from "react-router";
 import "./App.css";
+import ChooseSeats from "./ChooseSeats";
 
 export default function SeatsForm() {
   const [redirect, setRedirect] = useState(false);
+
+  const [numberOfSeats, setNumberOfSeats] = useState(0);
+  const [adjacentSeats, setAdjacentSeats] = useState(false);
+
   const dispatch = useDispatch();
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    const numberOfSeats = Number(e.target[0].value);
-    const adjacentSeats = Boolean(e.target[1].checked);
+    setNumberOfSeats(Number(e.target[0].value));
+    setAdjacentSeats(Boolean(e.target[1].checked));
     console.log(numberOfSeats, adjacentSeats);
 
-    // pass it to redux store
     dispatch(addSeatsConfiguration({ numberOfSeats, adjacentSeats }));
     setRedirect(true);
   };
   return redirect ? (
-    <Redirect to="wybierz-miejsca" />
+    // <Redirect to="wybierz-miejsca" />
+    <ChooseSeats numberOfSeats={numberOfSeats} adjacentSeats={adjacentSeats} />
   ) : (
     <div className="seats__form">
       <form className="form" onSubmit={handleSubmit}>

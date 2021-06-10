@@ -1,22 +1,83 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { useSelector } from "react-redux";
 
 import axios from "axios";
 
 const URL = "http://localhost:3000/seats";
 
-export default function ChooseSeats() {
-  const { seats } = useSelector((state) => state.seatsConfiguration);
+export default function ChooseSeats({ numberOfSeats, adjacentSeats }) {
+  const [seats, setSeats] = useState({ numberOfSeats, adjacentSeats });
+
+  const grid = useRef();
+
+  const returnNextSeat = (currentSeat) => {
+    return `.s${
+      Number(currentSeat.classList[1].split("")[1]) + 1
+    }${currentSeat.classList[1]
+      .split("")
+      .slice(2, currentSeat.classList[1].length)
+      .join("")}`;
+  };
 
   const handleSeatClick = (e) => {
-    console.log(e.target);
+    let clickedSeat = e.target;
+    if (!clickedSeat.classList.contains("seat--taken")) {
+      if (!seats.adjacentSeats) {
+        clickedSeat.classList.toggle("seat--choosen");
+
+        if (
+          grid.current.querySelectorAll(".seat--choosen").length >
+          seats.numberOfSeats
+        ) {
+          grid.current
+            .querySelectorAll(".seat--choosen")
+            .forEach((seat) => seat.classList.remove("seat--choosen"));
+        }
+      } else {
+        grid.current
+          .querySelectorAll(".seat:not(.seat--taken)")
+          .forEach((seat) => {
+            console.log(seat);
+          });
+
+        clickedSeat.classList.add("seat--choosen");
+        for (let i = 1; i < seats.numberOfSeats; i++) {
+          let nextSeat = returnNextSeat(clickedSeat);
+          if (
+            grid.current.querySelectorAll(".seat--choosen").length >
+            seats.numberOfSeats
+          ) {
+            grid.current
+              .querySelectorAll(".seat--choosen")
+              .forEach((seat) => seat.classList.remove("seat--choosen"));
+            break;
+          }
+          if (
+            grid.current.querySelector(nextSeat) == null ||
+            grid.current
+              .querySelector(nextSeat)
+              .classList.contains("seat--taken")
+          ) {
+            grid.current
+              .querySelectorAll(".seat:not(.seat--taken)")
+              .forEach((seat) => {
+                console.log(seat);
+                grid.current
+                  .querySelectorAll(".seat--choosen")
+                  .forEach((seat) => seat.classList.remove("seat--choosen"));
+              });
+          } else {
+            grid.current.querySelector(nextSeat).classList.add("seat--choosen");
+
+            clickedSeat = grid.current.querySelector(nextSeat);
+          }
+        }
+      }
+    }
   };
 
   const generateSeats = (seatsApiResponse) => {
     let seatsCords = [];
-    const seatsGrid = document.createElement("div");
-    seatsGrid.classList.add("seats__grid--left");
-
     Object.entries(seatsApiResponse).forEach((seat) => {
       seatsCords.push(
         `${seat[1].id}:${seat[1].cords.x}:${seat[1].cords.y}:${seat[1].reserved}`
@@ -38,12 +99,11 @@ export default function ChooseSeats() {
         seat.classList.add(`seat--taken`);
       }
       seat.onclick = handleSeatClick;
-      seatsGrid.appendChild(seat);
+      grid.current.appendChild(seat);
     });
 
     const style = document.createElement("style");
     style.innerHTML = styleContent;
-    document.querySelector(".seats__grid__container").appendChild(seatsGrid);
     document.head.appendChild(style);
   };
 
@@ -56,13 +116,13 @@ export default function ChooseSeats() {
       const res = (await axios.get(URL)).data;
       generateSeats(res);
     })();
-
-    console.log(seats);
   }, []);
 
   return (
     <main className="seats">
-      <div className="seats__grid__container"></div>
+      <div className="seats__grid__container">
+        <div className="grid" ref={grid}></div>
+      </div>
       <form className="form--reserve" onSubmit={handleSubmit}>
         <ul>
           <li>

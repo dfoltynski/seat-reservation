@@ -34,7 +34,7 @@
   background-color: #f4f4f4;
 }
 
-.seats__grid--left {
+.grid {
   display: grid;
   max-width: 453px;
   margin: 1em;
