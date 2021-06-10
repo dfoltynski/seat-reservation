@@ -23,7 +23,6 @@ export default function SeatsForm() {
     setRedirect(true);
   };
   return redirect ? (
-    // <Redirect to="wybierz-miejsca" />
     <ChooseSeats numberOfSeats={numberOfSeats} adjacentSeats={adjacentSeats} />
   ) : (
     <div className="seats__form">

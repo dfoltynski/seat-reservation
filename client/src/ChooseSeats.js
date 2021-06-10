@@ -4,6 +4,8 @@ import { useSelector } from "react-redux";
 import axios from "axios";
 
 const URL = "http://localhost:3000/seats";
+const CHOSEN_STYLE = "seat--chosen";
+const TAKEN_STYLE = "seat--taken";
 
 export default function ChooseSeats({ numberOfSeats, adjacentSeats }) {
   const [seats, setSeats] = useState({ numberOfSeats, adjacentSeats });
@@ -19,59 +21,99 @@ export default function ChooseSeats({ numberOfSeats, adjacentSeats }) {
       .join("")}`;
   };
 
+  const generateSeatsSuggestion = () => {
+    grid.current
+      .querySelectorAll(`.seat:not(.${TAKEN_STYLE}`)
+      .forEach((seat) => {
+        for (let i = 0; i < seats.numberOfSeats; i++) {
+          console.log(seat);
+
+          // done
+          if (
+            grid.current.querySelectorAll(`.${CHOSEN_STYLE}`).length ==
+            seats.numberOfSeats
+          ) {
+            break;
+          }
+
+          // if seat is null | has taken style | has chosen style do nothing and clean
+          if (
+            seat == null ||
+            seat.classList.contains(`${TAKEN_STYLE}`) ||
+            seat.classList.contains(`${CHOSEN_STYLE}`)
+          ) {
+            grid.current
+              .querySelectorAll(`.seat:not(.${TAKEN_STYLE})`)
+              .forEach((seat) => {
+                grid.current
+                  .querySelectorAll(`.${CHOSEN_STYLE}`)
+                  .forEach((seat) => seat.classList.remove(`${CHOSEN_STYLE}`));
+              });
+            break;
+          } else {
+            seat.classList.add(`${CHOSEN_STYLE}`);
+
+            let nextSeat = returnNextSeat(seat);
+            seat = grid.current.querySelector(nextSeat);
+          }
+        }
+      });
+  };
+
   const handleSeatClick = (e) => {
     let clickedSeat = e.target;
-    if (!clickedSeat.classList.contains("seat--taken")) {
+    if (!clickedSeat.classList.contains(`${TAKEN_STYLE}`)) {
       if (!seats.adjacentSeats) {
-        clickedSeat.classList.toggle("seat--choosen");
+        clickedSeat.classList.toggle(`${CHOSEN_STYLE}`);
 
-        // clean up when you clicked more times than number of seats
+        // if amount of chosen style elements are greater than provided number of seats clean up
         if (
-          grid.current.querySelectorAll(".seat--choosen").length >
+          grid.current.querySelectorAll(`.${CHOSEN_STYLE}`).length >
           seats.numberOfSeats
         ) {
           grid.current
-            .querySelectorAll(".seat--choosen")
-            .forEach((seat) => seat.classList.remove("seat--choosen"));
+            .querySelectorAll(`.${CHOSEN_STYLE}`)
+            .forEach((seat) => seat.classList.remove(`${CHOSEN_STYLE}`));
         }
       } else {
         grid.current
-          .querySelectorAll(".seat:not(.seat--taken)")
+          .querySelectorAll(`.seat:not(.${TAKEN_STYLE})`)
           .forEach((seat) => {
             console.log(seat);
           });
 
-        clickedSeat.classList.add("seat--choosen");
+        clickedSeat.classList.add(`${CHOSEN_STYLE}`);
         for (let i = 1; i < seats.numberOfSeats; i++) {
           let nextSeat = returnNextSeat(clickedSeat);
           clickedSeat = grid.current.querySelector(nextSeat);
 
-          // clean up when you clicked more times than number of seats
+          // if amount of chosen style elements are greater than provided number of seats clean up
           if (
-            grid.current.querySelectorAll(".seat--choosen").length >
+            grid.current.querySelectorAll(`.${CHOSEN_STYLE}`).length >
             seats.numberOfSeats
           ) {
             grid.current
-              .querySelectorAll(".seat--choosen")
-              .forEach((seat) => seat.classList.remove("seat--choosen"));
+              .querySelectorAll(`.${CHOSEN_STYLE}`)
+              .forEach((seat) => seat.classList.remove(`${CHOSEN_STYLE}`));
             break;
           }
 
-          // do nothing when there is no place for x number of seats or you want to use taken seat
+          // if clicked seat is null | has taken style | has chosen style do nothing and clean
           if (
             clickedSeat == null ||
-            clickedSeat.classList.contains("seat--taken")
+            clickedSeat.classList.contains(`${TAKEN_STYLE}`) ||
+            clickedSeat.classList.contains(`${CHOSEN_STYLE}`)
           ) {
             grid.current
-              .querySelectorAll(".seat:not(.seat--taken)")
+              .querySelectorAll(`.seat:not(.${TAKEN_STYLE})`)
               .forEach((seat) => {
                 grid.current
-                  .querySelectorAll(".seat--choosen")
-                  .forEach((seat) => seat.classList.remove("seat--choosen"));
+                  .querySelectorAll(`.${CHOSEN_STYLE}`)
+                  .forEach((seat) => seat.classList.remove(`${CHOSEN_STYLE}`));
               });
             break;
           } else {
-            clickedSeat.classList.add("seat--choosen");
+            clickedSeat.classList.add(`${CHOSEN_STYLE}`);
           }
         }
       }
@@ -82,11 +124,9 @@ export default function ChooseSeats({ numberOfSeats, adjacentSeats }) {
     let seatsCords = [];
     Object.entries(seatsApiResponse).forEach((seat) => {
       seatsCords.push(
-        `${seat[1].id}:${seat[1].cords.x}:${seat[1].cords.y}:${seat[1].reserved}`
+        `${seat[1].id}:${seat[1].cords.x}:${seat[1].cords.y}:${seat[1].reserved}` //s02:0:2:false
       );
     });
-
-    console.log(seatsCords[seatsCords.length - 1]);
 
     let styleContent = "";
     let seatClassName = "";
@@ -98,7 +138,7 @@ export default function ChooseSeats({ numberOfSeats, adjacentSeats }) {
       seat.classList.add(`seat`);
       seat.classList.add(`${seatClassName}`);
       if (seatCords.split(":")[3] == "true") {
-        seat.classList.add(`seat--taken`);
+        seat.classList.add(`${TAKEN_STYLE}`);
       }
       seat.onclick = handleSeatClick;
       grid.current.appendChild(seat);
@@ -107,6 +147,10 @@ export default function ChooseSeats({ numberOfSeats, adjacentSeats }) {
     const style = document.createElement("style");
     style.innerHTML = styleContent;
     document.head.appendChild(style);
+
+    if (seats.adjacentSeats) {
+      generateSeatsSuggestion();
+    }
   };
 
   const handleSubmit = (e) => {
@@ -136,7 +180,7 @@ export default function ChooseSeats({ numberOfSeats, adjacentSeats }) {
             Miejsca zarezerwowane
           </li>
           <li>
-            <div className="seat seat--choosen legend"></div>
+            <div className="seat seat--chosen legend"></div>
             Twój wybór
           </li>
         </ul>
