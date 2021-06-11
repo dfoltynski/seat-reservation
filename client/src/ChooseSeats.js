@@ -66,6 +66,7 @@ export default function ChooseSeats({ numberOfSeats, adjacentSeats }) {
 
   const handleSeatClick = (e) => {
     let clickedSeat = e.target;
+
     if (!clickedSeat.classList.contains(`${TAKEN_STYLE}`)) {
       if (!seats.adjacentSeats) {
         clickedSeat.classList.toggle(`${CHOSEN_STYLE}`);
@@ -99,8 +100,7 @@ export default function ChooseSeats({ numberOfSeats, adjacentSeats }) {
           // if clicked seat is null | has taken style | has chosen style do nothing and clean
           if (
             clickedSeat == null ||
-            clickedSeat.classList.contains(`${TAKEN_STYLE}`) ||
-            clickedSeat.classList.contains(`${CHOSEN_STYLE}`)
+            clickedSeat.classList.contains(`${TAKEN_STYLE}`)
           ) {
             grid.current
               .querySelectorAll(`.${CHOSEN_STYLE}`)
@@ -108,6 +108,7 @@ export default function ChooseSeats({ numberOfSeats, adjacentSeats }) {
             break;
           } else {
             clickedSeat.classList.add(`${CHOSEN_STYLE}`);
+            console.log("asd");
           }
         }
       }
@@ -154,8 +155,11 @@ export default function ChooseSeats({ numberOfSeats, adjacentSeats }) {
     grid.current.querySelectorAll(`.${CHOSEN_STYLE}`).forEach((seat) => {
       seatsList.push(seat.classList[1]);
     });
-    dispatch(addSeatsConfiguration(seatsList));
-    setRedirect(true);
+
+    if (seatsList.length > 0 && seatsList.length == numberOfSeats) {
+      dispatch(addSeatsConfiguration(seatsList));
+      setRedirect(true);
+    }
   };
 
   useEffect(() => {

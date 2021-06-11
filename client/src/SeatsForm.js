@@ -2,6 +2,21 @@ import React, { useState } from "react";
 import "./App.css";
 import ChooseSeats from "./ChooseSeats";
 
+const layout = {
+  labelCol: {
+    span: 8,
+  },
+  wrapperCol: {
+    span: 16,
+  },
+};
+const tailLayout = {
+  wrapperCol: {
+    offset: 8,
+    span: 16,
+  },
+};
+
 export default function SeatsForm() {
   const [redirect, setRedirect] = useState(false);
 

@@ -6,6 +6,15 @@
   height: 100vh;
 }
 
+.seats__header{
+  position: absolute;
+  top: 0;
+  left: 0;
+  color: #ababab;
+  font-size: 16px;
+  margin: 0.4em
+}
+
 .form {
   text-align: center;
 }
@@ -120,3 +129,44 @@ background-color: deeppink;
   cursor: pointer;
 }
 
+.summary {
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+.summary__list {
+  margin: 0.5em;
+  border: 2px solid black;
+  padding: 2.4em;
+  transition: 0.2s ease-in-out;
+}
+
+.summary__list:hover {
+  -webkit-box-shadow: 0px 0px 18px 5px rgba(0,0,0,0.05); 
+  box-shadow: 0px 0px 18px 5px rgba(0,0,0,0.05);
+}
+
+.summary__header {
+  font-weight: 600;
+}
+
+.summary__list__item {
+  display: flex;
+  flex-direction: column;
+  margin: 2em ;
+}
+
+h1,h2 {
+  margin: 0.4em;
+}
+
+.summary__list__item--id {
+width: 100%;
+margin: 0.4em 0;
+font-weight: 600;
+color: rgb(135, 135, 135);
+}
